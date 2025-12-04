@@ -42,11 +42,33 @@
 
 ## Setup Instructions
 
+### Setting Up Supabase
+
+Follow these steps to create a Supabase account, set up a new project, and obtain your project URL and API key.
+
+#### Step 1: Create a Supabase Account
+1. Go to [Supabase](https://supabase.com/).
+2. Click on **Sign Up** and enter your details to create a new account.
+3. Once signed in, click on **New Project** to start setting up a project.
+
+#### Step 2: Set Up a New Project
+1. Choose a name for your project and select the region closest to you.
+2. For the database password, enter a strong password (you'll need this to access your database, so keep it safe).
+3. Click **Create New Project**. Supabase will take a few moments to set up your project.
+
+#### Step 3: Access the Project Settings for URL and Key
+1. Once your project is created, go to the **Settings** tab on the left-hand menu.
+2. Click on **API** in the Settings menu. Here, you'll see:
+   - **URL**: This is the unique URL for your Supabase project.
+   - **anon key**: This is your public API key for accessing the Supabase API.
+
+
 ### Environment Variables
 
 - Create a .env file in the root directory of your project and define the following variables:
 
 ```bash
+```python
 VITE_SUPABASE_URL=<your_supabase_project_url>
 VITE_SUPABASE_KEY=<your_supabase_api_key>
 VITE_Backend_Port=<backend_port_number>
@@ -55,6 +77,7 @@ VITE_Backend_Port=<backend_port_number>
 - Create a .env file in the Back_end directory with following variables:
 
 ```bash
+```python
 Port=<Your backend port>
 EMAIL_USER=<your mail for nodemailer>
 EMAIL_PASS=<the secret key given by google cloud for nodemailer>
@@ -124,6 +147,7 @@ This will execute the migration in your newly created project.
      - The above tables are the manual explanations for creating the `user_data` tables use the below code in the `SQL EDITOR` for Handling the triggers
 
 ```bash
+```sql
   -- Create the user_data table
   create table user_data (
   id uuid references auth.users on delete cascade not null primary key,
@@ -170,6 +194,19 @@ create trigger on_auth_user_created
 
    No `foreign keys` needed
 
+  ```
+  
+
+2. **direct_messages**:  Disable the `RLS` and Enable the `Realtime`
+   
+   | Name         | Type        | Default Value       | Extra options                    |
+   |--------------|-------------|---------------------|----------------------------------|
+   | `id`         | `uuid`      | `gen_random_uuid()` | `primary`                        |
+   | `created_at` | `timestamp` | `now()`             |                 -                |
+   | `dm_chats`   | `json`      | NULL                | `Is Nullable`  `define as Array` |
+   
+  > No `foreign keys` needed
+   
    - **Purpose**: Stores contact information related to direct messaging.
 
 3. **chats_dm**: Disable the `RLS` and Enable the `Realtime`
@@ -182,6 +219,8 @@ create trigger on_auth_user_created
 
    No `foreign keys` needed
 
+  > No `foreign keys` needed
+   
    - **Purpose**: Stores direct messages between users.
 
 4. **channels_messages**: Disable the `RLS` and Enable the `Realtime`
@@ -196,6 +235,8 @@ create trigger on_auth_user_created
 
    No `foreign keys` needed
 
+  > No `foreign keys` needed
+   
    - **Purpose**: Stores messages and metadata for channels.
 
 5. **channels_list**: Disable the `RLS` and Enable the `Realtime`
@@ -247,6 +288,47 @@ No `foreign keys` needed
 
 - **Purpose**: Stores tasks assigned to everyone in a channel.
 
+   > No `foreign keys` needed
+   
+   - **Purpose**: Lists channels that a user is a member of.
+
+6. **Todo_list**:  Disable the `RLS` and Enable the `Realtime`
+    
+  | Name         | Type        | Default Value       | Extra options                    |
+  |--------------|-------------|---------------------|----------------------------------|
+  | `id`         | `uuid`      | `gen_random_uuid()` | `primary`                        |
+  | `created_at` | `timestamp` | `now()`             |                 -                |
+  | `todo_list`  | `json`      | NULL                | `Is Nullable`  `define as Array` |
+
+ > No `foreign keys` needed
+  
+   - **Purpose**: Stores user-specific todo lists.
+
+7. **Mails_sent**:  Disable the `RLS` and Enable the `Realtime`
+    
+  | Name         | Type        | Default Value       | Extra options |
+  |--------------|-------------|---------------------|---------------|
+  | `task_id`    | `uuid`      | `gen_random_uuid()` | `primary`     |
+  | `created_at` | `timestamp` | `now()`             |       -       |
+  | `last_sent`  | `text`      | NULL                | `Is Nullable` |
+  | `t_f`        | `bool`      | NULL                | `Is Nullable` |
+
+ > No `foreign keys` needed
+  
+   - **Purpose**: Tracks emails sent as reminders for tasks.
+
+8. **Channels_todolist**:  Disable the `RLS` and Enable the `Realtime`
+   
+   | Name         | Type        | Default Value       | Extra options                    |
+   |--------------|-------------|---------------------|----------------------------------|
+   | `id`         | `uuid`      | `gen_random_uuid()` | `primary`                        |
+   | `created_at` | `timestamp` | `now()`             |                 -                |
+   | `todo_list`  | `json`      | NULL                | `Is Nullable`  `Define as Array` |
+   
+ > No `foreign keys` needed
+
+   - **Purpose**: Stores tasks assigned to everyone in a channel.
+     
 ### Storage bucket
 
 1. Go to the Storage section and click on `new bucket`.

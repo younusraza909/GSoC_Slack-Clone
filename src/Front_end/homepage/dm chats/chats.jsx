@@ -7,6 +7,7 @@ import { Message } from "./message.jsx";
 import { Allconvers } from "../../context api/context.jsx";
 import { v4 as uuid } from "uuid";
 import { fetchUsermessages, fetchUserDmChatsid } from "../../database.jsx";
+import { IoIosSend } from "react-icons/io";
 
 export const Chats = () => {
   const textRef = useRef(""); //usestate didnot work but useref worked to make the input clear after updation
@@ -19,6 +20,7 @@ export const Chats = () => {
   const [msgupdate, setMsgupdate] = useState(false);
   const [chatshow, setchatshow] = useState(false);
   const [chatshow2, setchatshow2] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState("");
 
   useEffect(() => {
     const fetchchat = async () => {
@@ -233,11 +235,16 @@ export const Chats = () => {
             type="file"
             id="file"
             ref={imgRef}
-            style={{ display: "none" }} // hide the file input
+            style={{ display: "none" }}
+            onChange={(e) => {
+              if (e.target.files.length > 0) {
+                setSelectedFileName(e.target.files[0].name);  // Set file name
+              }
+            }}
           />
         </div>
         <button className={ChatsCSS.sendbutton} onClick={handlesend}>
-          Send
+          <IoIosSend size={28}/>
         </button>
       </div>
     </div>
